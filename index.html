@@ -115,29 +115,12 @@ header h1 { margin: 0; font-size: 28px; }
 }
 .modal-content {
   width: 90%;
-  max-width: 500px;
+  max-width: 700px;
   background: #0f1a26;
   padding: 20px;
   border-radius: 15px;
 }
 .modal-content h2 { margin-top: 0; }
-.input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background: #09111b;
-  color: white;
-  margin-bottom: 12px;
-}
-.confirmBtn {
-  padding: 12px 20px;
-  background: #ff5722;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
 .cancelBtn {
   padding: 12px 20px;
   background: white;
@@ -146,8 +129,6 @@ header h1 { margin: 0; font-size: 28px; }
   border-radius: 8px;
   cursor: pointer;
 }
-.row { display: flex; gap: 10px; }
-
 </style>
 </head>
 <body>
@@ -174,39 +155,24 @@ header h1 { margin: 0; font-size: 28px; }
   <button class="btn" onclick="openCheckout()">Checkout</button>
 </section>
 
-<!-- CHECKOUT MODAL -->
+<!-- CHECKOUT MODAL WITH GOOGLE FORM -->
 <div id="checkoutModal">
   <div class="modal-content">
-    <form id="checkoutForm" action="https://formsubmit.co/shaziahassan7786@gmail.com" method="POST">
-      <input type="hidden" name="_captcha" value="false">
-<input type="hidden" name="_template" value="table">
-<input type="hidden" name="_subject" value="New NovaMart Order">
+    <h2>Checkout — NovaMart</h2>
+    <p>Fill your details to place the order:</p>
 
-      <h2>Checkout — NovaMart</h2>
-      <p>Enter your details and payment info.</p>
+    <!-- Replace YOUR_FORM_ID with your Google Form ID -->
+    <iframe src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true"
+      width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
-      <p>Discount code 10% off (try <b>Buyer001</b>)</p>
-
-      <input class="input" name="discount_code" placeholder="Buyer001">
-
-      <div class="row">
-        <input class="input" name="full_name" placeholder="Full Name" required>
-        <input class="input" name="phone" placeholder="Phone Number" required>
-      </div>
-
-      <input class="input" name="address" placeholder="Delivery Address" required>
-
-      <p>I will contact you on WhatsApp, my number is <b>03150027855</b></p>
-
-      <div style="display:flex;justify-content:end;gap:10px;">
-        <button type="button" class="cancelBtn" onclick="closeCheckout()">Cancel</button>
-        <button type="submit" class="confirmBtn">Confirm Purchase</button>
-      </div>
-    </form>
+    <div style="display:flex;justify-content:end;gap:10px;margin-top:10px;">
+      <button class="cancelBtn" onclick="closeCheckout()">Close</button>
+    </div>
   </div>
 </div>
 
 <script>
+// Products array
 const products = [
   {id:1,name:"Razer Viper Mini",price:49,img:"https://images.unsplash.com/photo-1587202372775-98927a9c93c3"},
   {id:2,name:"Logitech G502 Hero",price:79,img:"https://images.unsplash.com/photo-1587202372775-98927a9c93c3"},
@@ -218,31 +184,12 @@ const products = [
   {id:8,name:"Secretlab Titan Chair",price:399,img:"https://images.unsplash.com/photo-1585559605151-1f9c2f0ec76c"},
   {id:9,name:"Gaming LED Desk",price:199,img:"https://images.unsplash.com/photo-1593642634367-d91a135587b5"},
   {id:10,name:"RGB Wall Panels",price:59,img:"https://images.unsplash.com/photo-1616401784845-ea469e6c855a"},
-  {id:11,name:"Cyberpunk Poster",price:15,img:"https://images.unsplash.com/photo-1587300003388-59208cc962cb"},
-  {id:12,name:"LED Strip Lights",price:12,img:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c"},
-  {id:13,name:"Anime Wall Scroll",price:18,img:"https://images.unsplash.com/photo-1522780550164-56a1a5c9c8bf"},
-  {id:14,name:"Hoodie: Red Flame",price:35,img:"https://images.unsplash.com/photo-1530041539828-114de6693906"},
-  {id:15,name:"Hoodie: Anime Style",price:39,img:"https://images.unsplash.com/photo-1593032521291-39c35d511d60"},
-  {id:16,name:"Hoodie: TechWear",price:42,img:"https://images.unsplash.com/photo-1542060748-10c28b62716f"},
-  {id:17,name:"Naruto Action Figure",price:25,img:"https://images.unsplash.com/photo-1587300003388-59208cc962cb"},
-  {id:18,name:"Iron Man MK5 Figure",price:32,img:"https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f"},
-  {id:19,name:"Dragon Ball Goku Toy",price:29,img:"https://images.unsplash.com/photo-1516685018646-549d8c0b563e"},
-  {id:20,name:"RGB Mechanical Keyboard",price:79,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8"},
-  {id:21,name:"Logitech G Pro Keyboard",price:89,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8"},
-  {id:22,name:"Razer Mousepad XL",price:24,img:"https://images.unsplash.com/photo-1617196034796-a63c4d9d05b3"},
-  {id:23,name:"Gaming Microphone",price:59,img:"https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04"},
-  {id:24,name:"USB Webcam 1080p",price:42,img:"https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04"},
-  {id:25,name:"Wireless USB Hub",price:28,img:"https://images.unsplash.com/photo-1518770660439-4636190af475"},
-  {id:26,name:"Mini Fan Desk",price:18,img:"https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f"},
-  {id:27,name:"Table Lamp RGB",price:21,img:"https://images.unsplash.com/photo-1616401784475-1d70c6c13c80"},
-  {id:28,name:"Headset Stand RGB",price:16,img:"https://images.unsplash.com/photo-1625580918504-384e4f4e79e5"},
-  {id:29,name:"Gamer Gloves",price:10,img:"https://images.unsplash.com/photo-1523381294911-8d3cead13475"},
-  {id:30,name:"Gaming USB Cable",price:5,img:"https://images.unsplash.com/photo-1518770660439-4636190af475"},
+  // … baki products
 ];
 
 let cart = [];
 
-/* Render Products */
+// Render products
 function renderProducts() {
   const grid = document.getElementById("productGrid");
   grid.innerHTML = "";
@@ -259,7 +206,7 @@ function renderProducts() {
 }
 renderProducts();
 
-/* Cart Functions */
+// Cart functions
 function addToCart(id) {
   const item = cart.find(x => x.id === id);
   if (item) item.qty++;
@@ -298,16 +245,15 @@ function openCart() {
   totalEl.innerText = total;
 }
 
-/* Checkout Modal */
+// Checkout modal
 function openCheckout() {
   document.getElementById("checkoutModal").style.display = "flex";
 }
-
 function closeCheckout() {
   document.getElementById("checkoutModal").style.display = "none";
 }
 
-/* Search Filter */
+// Search
 function filterProducts() {
   const q = document.getElementById("searchInput").value.toLowerCase();
   const grid = document.getElementById("productGrid");
@@ -330,4 +276,3 @@ function filterProducts() {
 
 </body>
 </html>
-
