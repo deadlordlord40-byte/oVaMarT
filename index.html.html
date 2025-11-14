@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Product</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        .box {
+            max-width: 500px;
+            background: white;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+            text-align: center;
+        }
+
+        .btn {
+            background: #008cff;
+            padding: 12px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #006fd6;
+        }
+
+        form {
+            margin-top: 20px;
+            display: none;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            height: 80px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>My Awesome Product</h2>
+        <p>Best product for your needs. Order now!</p>
+
+        <!-- Buy Button -->
+        <button class="btn" onclick="showForm()">Buy Now</button>
+
+        <!-- Order Form -->
+        <form action="https://formsubmit.co/shaziahassan7786@gmail.com" method="POST" id="orderForm">
+
+            <!-- Security & settings -->
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="New Order Received!">
+            <input type="hidden" name="_template" value="table">
+
+            <!-- User Input -->
+            <input type="text" name="Name" placeholder="Your Name" required>
+            <input type="tel" name="Phone" placeholder="Phone Number" required>
+            <textarea name="Address" placeholder="Full Address" required></textarea>
+
+            <button class="btn">Place Order</button>
+        </form>
+    </div>
+
+    <script>
+        function showForm() {
+            document.getElementById("orderForm").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
