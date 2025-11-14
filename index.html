@@ -102,33 +102,6 @@ header h1 { margin: 0; font-size: 28px; }
   border-radius: 8px;
   object-fit: cover;
 }
-
-/* Checkout Modal */
-#checkoutModal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: #000000a5;
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
-.modal-content {
-  width: 90%;
-  max-width: 700px;
-  background: #0f1a26;
-  padding: 20px;
-  border-radius: 15px;
-}
-.modal-content h2 { margin-top: 0; }
-.cancelBtn {
-  padding: 12px 20px;
-  background: white;
-  color: black;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
 </style>
 </head>
 <body>
@@ -152,28 +125,9 @@ header h1 { margin: 0; font-size: 28px; }
   <h2>Your Cart</h2>
   <div id="cartItems"></div>
   <h3>Total: $<span id="cartTotal">0</span></h3>
-  <button class="btn" onclick="openCheckout()">Checkout</button>
 </section>
 
-<!-- CHECKOUT MODAL WITH GOOGLE FORM -->
-<div id="checkoutModal">
-  <div class="modal-content">
-    <h2>Checkout — NovaMart</h2>
-    <p>Fill your details to place the order:</p>
-
-    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfRS52UqYskicp28x8-kPO5i96yBC2othRfTO5Cjb9L9aGpKg/viewform?embedded=true" 
-        width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-
-      width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-
-    <div style="display:flex;justify-content:end;gap:10px;margin-top:10px;">
-      <button class="cancelBtn" onclick="closeCheckout()">Close</button>
-    </div>
-  </div>
-</div>
-
 <script>
-// Products array
 const products = [
   {id:1,name:"Razer Viper Mini",price:49,img:"https://images.unsplash.com/photo-1587202372775-98927a9c93c3"},
   {id:2,name:"Logitech G502 Hero",price:79,img:"https://images.unsplash.com/photo-1587202372775-98927a9c93c3"},
@@ -184,13 +138,12 @@ const products = [
   {id:7,name:"Logitech G733 Lightspeed",price:169,img:"https://images.unsplash.com/photo-1606813907291-6c4c52c51bc3"},
   {id:8,name:"Secretlab Titan Chair",price:399,img:"https://images.unsplash.com/photo-1585559605151-1f9c2f0ec76c"},
   {id:9,name:"Gaming LED Desk",price:199,img:"https://images.unsplash.com/photo-1593642634367-d91a135587b5"},
-  {id:10,name:"RGB Wall Panels",price:59,img:"https://images.unsplash.com/photo-1616401784845-ea469e6c855a"},
-  // … baki products
+  {id:10,name:"RGB Wall Panels",price:59,img:"https://images.unsplash.com/photo-1616401784845-ea469e6c855a"}
 ];
 
 let cart = [];
 
-// Render products
+/* Render Products */
 function renderProducts() {
   const grid = document.getElementById("productGrid");
   grid.innerHTML = "";
@@ -200,75 +153,35 @@ function renderProducts() {
         <img src="${p.img}" alt="">
         <h3>${p.name}</h3>
         <p>$${p.price}</p>
-        <div class="btn" onclick="addToCart(${p.id})">Add to Cart</div>
+        <div class="btn" onclick="buyProduct('${p.name}')">Buy</div>
       </div>
     `;
   });
 }
 renderProducts();
 
-// Cart functions
-function addToCart(id) {
-  const item = cart.find(x => x.id === id);
-  if (item) item.qty++;
-  else cart.push({id, qty:1});
-  updateCart();
+function buyProduct(name) {
+  // Google Form prefill link
+  const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSfRS52UqYskicp28x8-kPO5i96yBC2othRfTO5Cjb9L9aGpKg/viewform?usp=pp_url";
+  const entryID = "entry.1234567890"; // replace with your Google Form field ID for Product Name
+  const prefillURL = `${formURL}&${entryID}=${encodeURIComponent(name)}`;
+  window.open(prefillURL, "_blank");
 }
 
-function updateCart() {
-  document.getElementById("cartCount").innerText =
-    cart.reduce((s, x) => s + x.qty, 0);
-}
-
-function openCart() {
-  document.getElementById("cartSection").style.display = "block";
-  const c = document.getElementById("cartItems");
-  const totalEl = document.getElementById("cartTotal");
-
-  c.innerHTML = "";
-  let total = 0;
-
-  cart.forEach((item) => {
-    const p = products.find(pr => pr.id === item.id);
-    total += p.price * item.qty;
-
-    c.innerHTML += `
-      <div class="cart-item">
-        <img src="${p.img}">
-        <div>
-          <h4>${p.name}</h4>
-          <p>$${p.price} × ${item.qty}</p>
-        </div>
-      </div>
-    `;
-  });
-
-  totalEl.innerText = total;
-}
-
-// Checkout modal
-function openCheckout() {
-  document.getElementById("checkoutModal").style.display = "flex";
-}
-function closeCheckout() {
-  document.getElementById("checkoutModal").style.display = "none";
-}
-
-// Search
+/* Search Filter */
 function filterProducts() {
   const q = document.getElementById("searchInput").value.toLowerCase();
   const grid = document.getElementById("productGrid");
   grid.innerHTML = "";
-
   products
     .filter(p => p.name.toLowerCase().includes(q))
     .forEach(p => {
       grid.innerHTML += `
         <div class="card">
-          <img src="${p.img}">
+          <img src="${p.img}" alt="">
           <h3>${p.name}</h3>
           <p>$${p.price}</p>
-          <div class="btn" onclick="addToCart(${p.id})">Add to Cart</div>
+          <div class="btn" onclick="buyProduct('${p.name}')">Buy</div>
         </div>
       `;
   });
@@ -277,4 +190,3 @@ function filterProducts() {
 
 </body>
 </html>
-
