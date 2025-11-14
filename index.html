@@ -1,91 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Product</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaMart Store</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background: #f2f2f2;
-            padding: 20px;
-        }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1622;
+  color: white;
+}
 
-        .box {
-            max-width: 500px;
-            background: white;
-            margin: auto;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #ccc;
-            text-align: center;
-        }
+/* Header */
+header {
+  padding: 20px;
+  background: #09111b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header h1 { margin: 0; font-size: 28px; }
 
-        .btn {
-            background: #008cff;
-            padding: 12px 20px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+/* Search */
+.search-box {
+  display: flex;
+  width: 100%;
+  max-width: 450px;
+}
+.search-box input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px 0 0 8px;
+  border: none;
+}
+.search-box button {
+  padding: 10px 20px;
+  border-radius: 0 8px 8px 0;
+  border: none;
+  background: #ff5722;
+  color: white;
+  cursor: pointer;
+}
 
-        .btn:hover {
-            background: #006fd6;
-        }
+/* Grid */
+.products {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(230px,1fr));
+  gap: 20px;
+}
+.card {
+  background: #112031;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+}
+.card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.card h3 { margin: 10px 0 5px; }
+.card p { margin: 5px 0; }
 
-        form {
-            margin-top: 20px;
-            display: none;
-        }
+.btn {
+  display: inline-block;
+  margin-top: 10px;
+  background: #ff5722;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+/* Cart */
+.cart-btn {
+  padding: 10px 20px;
+  background: #ff5722;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
-        textarea {
-            height: 80px;
-        }
-    </style>
+#cartSection {
+  padding: 20px;
+}
+
+.cart-item {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  background: #112031;
+  padding: 12px;
+  border-radius: 10px;
+}
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Checkout Modal */
+#checkoutModal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #000000a5;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  width: 90%;
+  max-width: 500px;
+  background: #0f1a26;
+  padding: 20px;
+  border-radius: 15px;
+}
+.modal-content h2 { margin-top: 0; }
+.input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #09111b;
+  color: white;
+  margin-bottom: 12px;
+}
+.confirmBtn {
+  padding: 12px 20px;
+  background: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.cancelBtn {
+  padding: 12px 20px;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.row { display: flex; gap: 10px; }
+
+</style>
 </head>
 <body>
 
-    <div class="box">
-        <h2>My Awesome Product</h2>
-        <p>Best product for your needs. Order now!</p>
+<header>
+  <h1>NovaMart</h1>
 
-        <!-- Buy Button -->
-        <button class="btn" onclick="showForm()">Buy Now</button>
+  <div class="search-box">
+    <input id="searchInput" placeholder="Search products...">
+    <button onclick="filterProducts()">Search</button>
+  </div>
 
-        <!-- Order Form -->
-        <form action="https://formsubmit.co/shaziahassan7786@gmail.com" method="POST" id="orderForm">
+  <div class="cart-btn" onclick="openCart()">Cart (<span id="cartCount">0</span>)</div>
+</header>
 
-            <!-- Security & settings -->
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_subject" value="New Order Received!">
-            <input type="hidden" name="_template" value="table">
+<!-- PRODUCT GRID -->
+<div class="products" id="productGrid"></div>
 
-            <!-- User Input -->
-            <input type="text" name="Name" placeholder="Your Name" required>
-            <input type="tel" name="Phone" placeholder="Phone Number" required>
-            <textarea name="Address" placeholder="Full Address" required></textarea>
+<!-- CART -->
+<section id="cartSection" style="display:none;">
+  <h2>Your Cart</h2>
+  <div id="cartItems"></div>
+  <h3>Total: $<span id="cartTotal">0</span></h3>
+  <button class="btn" onclick="openCheckout()">Checkout</button>
+</section>
 
-            <button class="btn">Place Order</button>
-        </form>
-    </div>
+<!-- CHECKOUT MODAL -->
+<div id="checkoutModal">
+  <div class="modal-content">
+    <form id="checkoutForm" action="https://formsubmit.co/shaziahassan7786@gmail.com" 
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_subject" value="New NovaMart Order">
 
-    <script>
-        function showForm() {
-            document.getElementById("orderForm").style.display = "block";
-        }
-    </script>
+      <h2>Checkout — NovaMart</h2>
+      <p>Enter your details and payment info.</p>
+
+      <p>Discount code 10% off (try <b>Buyer001</b>)</p>
+
+      <input class="input" name="discount_code" placeholder="Buyer001">
+
+      <div class="row">
+        <input class="input" name="full_name" placeholder="Full Name" required>
+        <input class="input" name="phone" placeholder="Phone Number" required>
+      </div>
+
+      <input class="input" name="address" placeholder="Delivery Address" required>
+
+      <p>I will contact you on WhatsApp, my number is <b>03150027855</b></p>
+
+      <div style="display:flex;justify-content:end;gap:10px;">
+        <button type="button" class="cancelBtn" onclick="closeCheckout()">Cancel</button>
+        <button type="submit" class="confirmBtn">Confirm Purchase</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+const products = [
+  {id:1,name:"Razer Viper Mini",price:49,img:"https://images.unsplash.com/photo-1587202372775-98927a9c93c3"},
+  {id:2,name:"Logitech G502 Hero",price:79,img:"https://images.unsplash.com/photo-1587202372775-98927a9c93c3"},
+  {id:3,name:"SteelSeries Rival 600",price:89,img:"https://images.unsplash.com/photo-1546868871-7041f2a55e12"},
+  {id:4,name:"Redragon M711 Cobra",price:29,img:"https://images.unsplash.com/photo-1580894908361-96719503368e"},
+  {id:5,name:"Razer BlackShark V2",price:99,img:"https://images.unsplash.com/photo-1593642634315-48f5414c3ad9"},
+  {id:6,name:"HyperX Cloud Alpha",price:129,img:"https://images.unsplash.com/photo-1615615228002-cc9ce5e16e64"},
+  {id:7,name:"Logitech G733 Lightspeed",price:169,img:"https://images.unsplash.com/photo-1606813907291-6c4c52c51bc3"},
+  {id:8,name:"Secretlab Titan Chair",price:399,img:"https://images.unsplash.com/photo-1585559605151-1f9c2f0ec76c"},
+  {id:9,name:"Gaming LED Desk",price:199,img:"https://images.unsplash.com/photo-1593642634367-d91a135587b5"},
+  {id:10,name:"RGB Wall Panels",price:59,img:"https://images.unsplash.com/photo-1616401784845-ea469e6c855a"},
+  {id:11,name:"Cyberpunk Poster",price:15,img:"https://images.unsplash.com/photo-1587300003388-59208cc962cb"},
+  {id:12,name:"LED Strip Lights",price:12,img:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c"},
+  {id:13,name:"Anime Wall Scroll",price:18,img:"https://images.unsplash.com/photo-1522780550164-56a1a5c9c8bf"},
+  {id:14,name:"Hoodie: Red Flame",price:35,img:"https://images.unsplash.com/photo-1530041539828-114de6693906"},
+  {id:15,name:"Hoodie: Anime Style",price:39,img:"https://images.unsplash.com/photo-1593032521291-39c35d511d60"},
+  {id:16,name:"Hoodie: TechWear",price:42,img:"https://images.unsplash.com/photo-1542060748-10c28b62716f"},
+  {id:17,name:"Naruto Action Figure",price:25,img:"https://images.unsplash.com/photo-1587300003388-59208cc962cb"},
+  {id:18,name:"Iron Man MK5 Figure",price:32,img:"https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f"},
+  {id:19,name:"Dragon Ball Goku Toy",price:29,img:"https://images.unsplash.com/photo-1516685018646-549d8c0b563e"},
+  {id:20,name:"RGB Mechanical Keyboard",price:79,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8"},
+  {id:21,name:"Logitech G Pro Keyboard",price:89,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8"},
+  {id:22,name:"Razer Mousepad XL",price:24,img:"https://images.unsplash.com/photo-1617196034796-a63c4d9d05b3"},
+  {id:23,name:"Gaming Microphone",price:59,img:"https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04"},
+  {id:24,name:"USB Webcam 1080p",price:42,img:"https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04"},
+  {id:25,name:"Wireless USB Hub",price:28,img:"https://images.unsplash.com/photo-1518770660439-4636190af475"},
+  {id:26,name:"Mini Fan Desk",price:18,img:"https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f"},
+  {id:27,name:"Table Lamp RGB",price:21,img:"https://images.unsplash.com/photo-1616401784475-1d70c6c13c80"},
+  {id:28,name:"Headset Stand RGB",price:16,img:"https://images.unsplash.com/photo-1625580918504-384e4f4e79e5"},
+  {id:29,name:"Gamer Gloves",price:10,img:"https://images.unsplash.com/photo-1523381294911-8d3cead13475"},
+  {id:30,name:"Gaming USB Cable",price:5,img:"https://images.unsplash.com/photo-1518770660439-4636190af475"},
+];
+
+let cart = [];
+
+/* Render Products */
+function renderProducts() {
+  const grid = document.getElementById("productGrid");
+  grid.innerHTML = "";
+  products.forEach(p => {
+    grid.innerHTML += `
+      <div class="card">
+        <img src="${p.img}" alt="">
+        <h3>${p.name}</h3>
+        <p>$${p.price}</p>
+        <div class="btn" onclick="addToCart(${p.id})">Add to Cart</div>
+      </div>
+    `;
+  });
+}
+renderProducts();
+
+/* Cart Functions */
+function addToCart(id) {
+  const item = cart.find(x => x.id === id);
+  if (item) item.qty++;
+  else cart.push({id, qty:1});
+  updateCart();
+}
+
+function updateCart() {
+  document.getElementById("cartCount").innerText =
+    cart.reduce((s, x) => s + x.qty, 0);
+}
+
+function openCart() {
+  document.getElementById("cartSection").style.display = "block";
+  const c = document.getElementById("cartItems");
+  const totalEl = document.getElementById("cartTotal");
+
+  c.innerHTML = "";
+  let total = 0;
+
+  cart.forEach((item) => {
+    const p = products.find(pr => pr.id === item.id);
+    total += p.price * item.qty;
+
+    c.innerHTML += `
+      <div class="cart-item">
+        <img src="${p.img}">
+        <div>
+          <h4>${p.name}</h4>
+          <p>$${p.price} × ${item.qty}</p>
+        </div>
+      </div>
+    `;
+  });
+
+  totalEl.innerText = total;
+}
+
+/* Checkout Modal */
+function openCheckout() {
+  document.getElementById("checkoutModal").style.display = "flex";
+}
+
+function closeCheckout() {
+  document.getElementById("checkoutModal").style.display = "none";
+}
+
+/* Search Filter */
+function filterProducts() {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const grid = document.getElementById("productGrid");
+  grid.innerHTML = "";
+
+  products
+    .filter(p => p.name.toLowerCase().includes(q))
+    .forEach(p => {
+      grid.innerHTML += `
+        <div class="card">
+          <img src="${p.img}">
+          <h3>${p.name}</h3>
+          <p>$${p.price}</p>
+          <div class="btn" onclick="addToCart(${p.id})">Add to Cart</div>
+        </div>
+      `;
+  });
+}
+</script>
 
 </body>
 </html>
-
