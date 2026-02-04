@@ -1,188 +1,2259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovaMart Store</title>
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b1622;
-  color: white;
-}
-
-/* Header */
-header {
-  padding: 20px;
-  background: #09111b;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-header h1 { margin: 0; font-size: 28px; }
-
-/* Search */
-.search-box {
-  display: flex;
-  width: 100%;
-  max-width: 450px;
-}
-.search-box input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px 0 0 8px;
-  border: none;
-}
-.search-box button {
-  padding: 10px 20px;
-  border-radius: 0 8px 8px 0;
-  border: none;
-  background: #ff5722;
-  color: white;
-  cursor: pointer;
-}
-
-/* Grid */
-.products {
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(230px,1fr));
-  gap: 20px;
-}
-.card {
-  background: #112031;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-}
-.card img {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-.card h3 { margin: 10px 0 5px; }
-.card p { margin: 5px 0; }
-
-.btn {
-  display: inline-block;
-  margin-top: 10px;
-  background: #ff5722;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-/* Cart */
-.cart-btn {
-  padding: 10px 20px;
-  background: #ff5722;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-#cartSection {
-  padding: 20px;
-}
-
-.cart-item {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
-  background: #112031;
-  padding: 12px;
-  border-radius: 10px;
-}
-.cart-item img {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  object-fit: cover;
-}
-.cart-item img {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  object-fit: cover;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root | Shoot</title>
+    <!-- Diamond emoji as favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>">
+    <!-- YEH LINES ADD KARO -->
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://img.icons8.com/color/180/000000/gem.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://img.icons8.com/color/32/000000/gem.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://img.icons8.com/color/16/000000/gem.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="shortcut icon" href="https://img.icons8.com/color/48/000000/gem.png" type="image/x-icon">
+    <meta name="theme-color" content="#FFD700">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-dark: #D4AF37;
+            --gold-light: #FFED4E;
+            --black: #0F0F0F;
+            --gray: #1A1A1A;
+            --card-bg: #1E1E1E;
+            --white: #F5F5F5;
+            --red: #FF3B30;
+            --green: #34C759;
+            --blue: #007AFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: var(--black);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        
+        .logo i {
+            font-size: 32px;
+            color: var(--gold);
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            background: linear-gradient(to right, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .login-btn {
+            background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+            color: var(--black);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .login-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .user-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--gold), var(--gold-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--black);
+            cursor: pointer;
+        }
+        
+        .user-menu {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: var(--gray);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            padding: 10px;
+            display: none;
+            z-index: 1000;
+            min-width: 200px;
+        }
+        
+        .user-menu.active {
+            display: block;
+        }
+        
+        .user-menu-item {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-menu-item:hover {
+            background: var(--card-bg);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 30px;
+            background: var(--gray);
+            padding: 15px 5%;
+            justify-content: center;
+            border-bottom: 1px solid #333;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            color: #ccc;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 5px 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            color: var(--gold);
+        }
+        
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+        }
+        
+        .cart-btn {
+            position: relative;
+            font-size: 24px;
+            color: var(--gold);
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--red);
+            color: white;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), 
+                        url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 5%;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: #ccc;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+            color: var(--black);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--gray);
+            color: white;
+            border: 1px solid #444;
+        }
+        
+        .btn-secondary:hover {
+            background: #222;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .container {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gold);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.1);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--gold);
+            color: var(--black);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: white;
+            min-height: 54px;
+        }
+        
+        .product-desc {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 15px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .product-actions .btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+        }
+        
+        .orders-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background: var(--gray);
+            border: 1px solid #444;
+            color: #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active {
+            background: var(--gold);
+            color: var(--black);
+            border-color: var(--gold);
+        }
+        
+        .order-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--gold);
+            transition: transform 0.3s;
+        }
+        
+        .order-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .order-status {
+            background: var(--gray);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-pending { background: var(--gold); color: var(--black); }
+        .status-processing { background: var(--blue); color: white; }
+        .status-delivered { background: var(--green); color: white; }
+        .status-cancelled { background: var(--red); color: white; }
+        .status-accepted { background: #FF9500; color: white; }
+        
+        .order-items {
+            margin: 15px 0;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .admin-reply {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 122, 255, 0.1);
+            border-left: 3px solid var(--blue);
+            border-radius: 4px;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1001;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            max-width: 500px;
+            margin: 50px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            background: var(--gold);
+            color: var(--black);
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-close {
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--black);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .google-btn {
+            background: white;
+            color: #757575;
+            border: 1px solid #ddd;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .google-btn:hover {
+            background: #f8f8f8;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        
+        .google-btn:active {
+            transform: translateY(0);
+        }
+        
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background: var(--black);
+            z-index: 1000;
+            border-left: 2px solid var(--gold);
+        }
+        
+        .cart-header {
+            padding: 20px;
+            background: var(--gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cart-items {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .cart-total {
+            padding: 20px;
+            background: var(--gray);
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--gold);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .footer {
+            background: #0A0A0A;
+            padding: 50px 5% 20px;
+            margin-top: 50px;
+            border-top: 2px solid var(--gold);
+        }
+        
+        .copyright {
+            text-align: center;
+            color: #666;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--green);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 10000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .notification.error {
+            background: var(--red);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-header h3 {
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            color: #888;
+            position: relative;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #444;
+        }
+        
+        .divider::before {
+            left: 0;
+        }
+        
+        .divider::after {
+            right: 0;
+        }
+        
+        /* NEW PAYMENT OPTIONS STYLES */
+        .payment-options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .payment-option {
+            background: var(--card-bg);
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--gold);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+        }
+        
+        .payment-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .payment-info {
+            flex: 1;
+        }
+        
+        .payment-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+            margin-bottom: 5px;
+        }
+        
+        .payment-desc {
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .bank-options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .bank-option {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .bank-option:hover {
+            border-color: var(--gold);
+            background: rgba(255,215,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-modal {
+                width: 100%;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .orders-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .modal-content {
+                margin: 20px auto;
+            }
+            
+            .bank-options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo" onclick="showPage('home')">
+            <i class="fas fa-gem"></i>
+            <h1>Root Shoot</h1>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-details" id="userDetails" style="display: none;">
+                <div class="user-avatar" id="userAvatar" onclick="toggleUserMenu()">
+                    <!-- Avatar will be loaded by JavaScript -->
+                </div>
+                <div>
+                    <div id="userName">User</div>
+                    <div style="font-size: 12px; color: #888;" id="userEmail"></div>
+                </div>
+            </div>
+            
+            <div class="user-menu" id="userMenu">
+                <div class="user-menu-item" onclick="showPage('profile')">
+                    <i class="fas fa-user"></i> Profile
+                </div>
+                <div class="user-menu-item" onclick="showPage('orders')">
+                    <i class="fas fa-box"></i> My Orders
+                </div>
+                <div class="user-menu-item" onclick="showPage('contact')">
+                    <i class="fas fa-envelope"></i> Contact
+                </div>
+                <div class="user-menu-item" onclick="showPage('messages')">
+                    <i class="fas fa-inbox"></i> My Messages
+                </div>
+                <div class="user-menu-item" onclick="logoutUser()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </div>
+            </div>
+            
+            <button class="cart-btn" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <div class="cart-count">0</div>
+            </button>
+            
+            <button class="login-btn" onclick="openAuth()" id="loginButton">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav class="nav">
+        <button class="nav-btn active" onclick="showPage('home')">Home</button>
+        <button class="nav-btn" onclick="showPage('products')">Products</button>
+        <button class="nav-btn" onclick="showPage('orders')">My Orders</button>
+        <button class="nav-btn" onclick="showPage('contact')">Contact</button>
+        <button class="nav-btn" onclick="showPage('messages')">Messages</button>
+    </nav>
+    
+    <!-- Home Page -->
+    <div class="page active" id="home-page">
+        <section class="hero">
+            <h1>Root Shoot</h1>
+            <p>Discover our 100% organic Products.</p>
+            <button class="btn btn-primary" onclick="showPage('products')">
+                <i class="fas fa-crown"></i> Shop Now
+            </button>
+        </section>
+        
+        <section class="container">
+            <h2 class="section-title">Why Choose RootShoot?</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-info">
+                        <h3 class="product-title">Organic Products</h3>
+                        <p class="product-desc">Every item is 100% organic for its best quality and Trust.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-info">
+                        <h3 class="product-title">Secure Shopping</h3>
+                        <p class="product-desc">Your data is protected with enterprise-grade security protocols.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-info">
+                        <h3 class="product-title">24/7 Support</h3>
+                        <p class="product-desc">Our customer support team is always ready to assist you.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Products Page -->
+    <div class="page" id="products-page">
+        <section class="container">
+            <h2 class="section-title">Products</h2>
+            <div class="products-grid" id="productsContainer">
+                <!-- Products loaded by JavaScript -->
+            </div>
+        </section>
+    </div>
+    
+    <!-- Orders Page -->
+    <div class="page" id="orders-page">
+        <section class="container">
+            <div class="orders-header">
+                <h2 class="section-title" style="margin-bottom: 0;">My Orders</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterOrders('all')">All</button>
+                    <button class="filter-btn" onclick="filterOrders('Pending')">Pending</button>
+                    <button class="filter-btn" onclick="filterOrders('Accepted')">Accepted</button>
+                    <button class="filter-btn" onclick="filterOrders('Processing')">Processing</button>
+                    <button class="filter-btn" onclick="filterOrders('Delivered')">Delivered</button>
+                </div>
+            </div>
+            <div class="orders-container" id="ordersContainer">
+                <!-- Orders will be loaded here -->
+            </div>
+        </section>
+    </div>
+    
+    <!-- Contact Page -->
+    <div class="page" id="contact-page">
+        <section class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label>Your Name *</label>
+                        <input type="text" id="contactName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" id="contactEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="contactPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Message *</label>
+                        <textarea id="contactMessage" rows="4" required placeholder="Tell us how we can help you..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" onclick="sendMessage()" style="flex: 1;">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Messages Page -->
+    <div class="page" id="messages-page">
+        <section class="container">
+            <h2 class="section-title">My Messages</h2>
+            <div class="orders-container" id="messagesContainer">
+                <!-- Messages will be loaded here -->
+            </div>
+        </section>
+    </div>
+    
+    <!-- Profile Page -->
+    <div class="page" id="profile-page">
+        <section class="container">
+            <h2 class="section-title">My Profile</h2>
+            <div class="orders-container">
+                <div class="order-card" id="profileInfo">
+                    <!-- Profile info will be loaded here -->
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div style="text-align: center;">
+            <p>© 2025 Root and shoot. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 14px; color: #888;">
+                Safe and trusted E-commerce Platform
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <div onclick="closeCart()" style="cursor: pointer; font-size: 24px;">×</div>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal">₹0</span>
+        </div>
+        <div style="padding: 20px;">
+            <button class="btn btn-primary" onclick="openPaymentOptions()" style="width: 100%;">
+                <i class="fas fa-shopping-bag"></i> Proceed to Checkout
+            </button>
+        </div>
+    </div>
+    
+    <!-- Auth Modal - GOOGLE ONLY -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Welcome to RootShoot</span>
+                <span class="modal-close" onclick="closeAuth()">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="auth-header">
+                    <h3><i class="fas fa-gem"></i> Sign In</h3>
+                    <p style="color: #888;">Use your Google account to continue</p>
+                </div>
+                
+                <!-- Only Google Sign In -->
+                <button id="googleSignInBtn" class="google-btn" onclick="signInWithGoogle()">
+                    <i class="fab fa-google" style="color: #DB4437;"></i>
+                    Sign in with Google
+                </button>
+                
+                <div class="divider">Only Google Sign In Available</div>
+                
+                <div style="text-align: center; color: #888; font-size: 14px; padding: 15px; background: rgba(255,215,0,0.1); border-radius: 8px;">
+                    <i class="fas fa-info-circle"></i>
+                    <p style="margin-top: 5px;">For security, we only support Google Sign In.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Payment Options Modal (NEW) -->
+    <div class="modal" id="paymentOptionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Choose Payment Method</span>
+                <span class="modal-close" onclick="closePaymentModal()">×</span>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h3 style="color: var(--gold);">Total: ₹<span id="paymentTotal">0</span></h3>
+                    <p style="color: #888; margin-top: 10px;">Select your preferred payment method</p>
+                </div>
+                
+                <div class="payment-options-grid">
+                    <!-- COD Option -->
+                    <div class="payment-option" onclick="selectCOD()">
+                        <div class="payment-icon" style="background: #34C759;">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-title">Cash on Delivery</div>
+                            <div class="payment-desc">Pay when you receive the product</div>
+                        </div>
+                    </div>
+                    
+                    <!-- EasyPaisa -->
+                    <div class="payment-option" onclick="openEasyPaisa()">
+                        <div class="payment-icon" style="background: #00A79D;">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-title">EasyPaisa</div>
+                            <div class="payment-desc">Pay via Mobile Wallet (PKR)</div>
+                        </div>
+                    </div>
+                    
+                    <!-- JazzCash -->
+                    <div class="payment-option" onclick="openJazzCash()">
+                        <div class="payment-icon" style="background: #F37021;">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-title">JazzCash</div>
+                            <div class="payment-desc">Pay via JazzCash Account</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bank Transfer -->
+                    <div class="payment-option" onclick="showBankOptions()">
+                        <div class="payment-icon" style="background: #007AFF;">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-title">Bank Transfer</div>
+                            <div class="payment-desc">Pay via any Pakistani Bank</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Credit/Debit Card -->
+                    <div class="payment-option" onclick="openCardPayment()">
+                        <div class="payment-icon" style="background: #FF2D55;">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-title">Credit/Debit Card</div>
+                            <div class="payment-desc">Visa, Mastercard, UnionPay</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bank Options Modal (NEW) -->
+    <div class="modal" id="bankOptionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Select Your Bank</span>
+                <span class="modal-close" onclick="closeBankModal()">×</span>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h4 style="color: var(--gold);">Transfer to: <span id="bankAccountNumber">0333-1234567</span></h4>
+                    <p style="color: #888; font-size: 14px;">Account Name: ROOT SHOOT STORE</p>
+                    <p style="color: #888; font-size: 14px;">Amount: ₹<span id="bankAmount">0</span></p>
+                </div>
+                
+                <div class="bank-options-grid">
+                    <div class="bank-option" onclick="openBank('hbl')">
+                        <div>HBL</div>
+                    </div>
+                    <div class="bank-option" onclick="openBank('meezan')">
+                        <div>Meezan Bank</div>
+                    </div>
+                    <div class="bank-option" onclick="openBank('ubl')">
+                        <div>UBL</div>
+                    </div>
+                    <div class="bank-option" onclick="openBank('alfalah')">
+                        <div>Bank Alfalah</div>
+                    </div>
+                    <div class="bank-option" onclick="openBank('mcb')">
+                        <div>MCB</div>
+                    </div>
+                    <div class="bank-option" onclick="openBank('askari')">
+                        <div>Askari Bank</div>
+                    </div>
+                    <div class="bank-option" onclick="openBank('scb')">
+                        <div>Standard Chartered</div>
+                    </div>
+                    <div class="bank-option" onclick="openBank('soneri')">
+                        <div>Soneri Bank</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,215,0,0.1); border-radius: 8px;">
+                    <p style="color: #888; font-size: 14px; margin-bottom: 10px;">
+                        <i class="fas fa-info-circle"></i> After payment, WhatsApp the receipt to:
+                    </p>
+                    <p style="color: var(--gold); font-weight: bold; text-align: center;">+92 300 1234567</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Complete Your Order</span>
+                <span class="modal-close" onclick="closeCheckout()">×</span>
+            </div>
+            <div class="modal-body">
+                <div id="orderSummary" style="margin-bottom: 20px;"></div>
+                
+                <form id="checkoutForm">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="customerName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="customerPhone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" id="customerEmail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Delivery Address *</label>
+                        <textarea id="customerAddress" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="paymentMethod" required>
+                            <option value="cod" selected>Cash on Delivery</option>
+                            <option value="easypaisa">EasyPaisa</option>
+                            <option value="jazzcash">JazzCash</option>
+                            <option value="bank">Bank Transfer</option>
+                            <option value="card">Credit/Debit Card</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" onclick="placeOrder()" style="flex: 2;">
+                            <i class="fas fa-check-circle"></i> Place Order
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="closeCheckout()" style="flex: 1;">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
 
-<header>
-  <h1>NovaMart</h1>
+    <script>
+        // ========== FIREBASE CONFIGURATION ==========
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXd5OXhBIeK6ZgsGac2WApW6b5ctOP138",
+            authDomain: "rootandshoot-25366.firebaseapp.com",
+            projectId: "rootandshoot-25366",
+            storageBucket: "rootandshoot-25366.firebasestorage.app",
+            messagingSenderId: "644099796079",
+            appId: "1:644099796079:web:6551da1de0a075fbeeb19a"
+        };
 
-  <div class="search-box">
-    <input id="searchInput" placeholder="Search products...">
-    <button onclick="filterProducts()">Search</button>
-  </div>
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
+        // Global Variables
+        let products = [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let currentUser = null;
+        let currentFilter = 'all';
 
-  <div class="cart-btn" onclick="openCart()">Cart (<span id="cartCount">0</span>)</div>
-</header>
-<marquee bgcolor="orange">This Website is only base on cash on delivery</marquee>
+        // ========== INITIALIZE APP ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("App initialized");
+            
+            // Setup Firebase auth listener
+            auth.onAuthStateChanged(handleAuthStateChange);
+            
+            // Load products
+            loadProducts();
+            
+            // Update cart count
+            updateCartCount();
+        });
 
-<!-- PRODUCT GRID -->
-<div class="products" id="productGrid"></div>
+        // ========== AUTHENTICATION FUNCTIONS ==========
+        function handleAuthStateChange(user) {
+            if (user) {
+                console.log("User signed in:", user.email);
+                currentUser = {
+                    uid: user.uid,
+                    name: user.displayName || user.email.split('@')[0],
+                    email: user.email,
+                    photoURL: user.photoURL
+                };
+                
+                updateUserDisplay();
+                showNotification(`Welcome ${currentUser.name}!`);
+                
+            } else {
+                console.log("User signed out");
+                currentUser = null;
+                updateUserDisplay();
+            }
+        }
 
-<!-- CART -->
-<section id="cartSection" style="display:none;">
-  <h2>Your Cart</h2>
-  <div id="cartItems"></div>
-  <h3>Total: Rs <span id="cartTotal">0</span></h3>
-</section>
+        async function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            try {
+                const result = await auth.signInWithPopup(provider);
+                console.log("Google sign-in successful");
+                closeAuth();
+                
+                // Save user data
+                saveUserToFirestore(result.user);
+                
+            } catch (error) {
+                console.error("Google sign-in error:", error);
+                showNotification('Sign-in failed. Please try again.', 'error');
+            }
+        }
 
-<script>
-const products = [
-  {id:1,name:"Talbina",price:30,img:"https://s2.ezgif.com/tmp/ezgif-269283c6896f7d19.png"},
-  {id:2,name:"Glutathione Face Wash",price:79,img:"https://s2.ezgif.com/tmp/ezgif-29c292a5107f05ee.png"},
-  {id:3,name:"Vitamin-C Face Wash",price:89,img:"https://s2.ezgif.com/tmp/ezgif-27777f1390c6ca39.png"},
-  {id:4,name:"Slim Pro Syrup",price:29,img:"https://successchaserstars.com/assets/img/490e5091462f9bd91eb28db30dda4677.jpg"},
-  {id:5,name:"Anti-Acne Face Wash",price:99,img:"https://successchaserstars.com/assets/img/4739e5376b63f1828d14e81f7eb6268d.png"},
-  {id:6,name:"Acne Treatment Gel Skin Mask",price:129,img:"https://successchaserstars.com/assets/img/69197318d8cbe138ab6cc2429e217ffe.jpg"},
-  {id:7,name:"Glow Skin Face Gel Mask",price:169,img:"https://successchaserstars.com/assets/img/74dac073564a9b57645f147285598615.jpg"},
-  {id:8,name:"Vitamin-C Gel Skin Mask",price:399,img:"https://successchaserstars.com/assets/img/410b814d043cb5ac3f354b1850b9bd75.png"},
-  {id:9,name:"Stars beauty Cream",price:199,img:"https://successchaserstars.com/assets/img/d335cff5ee42251fe8cc0671c49fa574.png"},
-  {id:10,name:"Anti Acne Serum",price:59,img:"https://successchaserstars.com/assets/img/d302dda160ceffd08acbd73b2557c474.png"},
-  {id:11,name:"Alovera Jiuce",price:59,img:"https://successchaserstars.com/assets/img/108957b0aa57a17b7cc489b80deea59d.png"},
-  {id:12,name:"Natural Growth Hair Shampoo",price:59,img:"https://successchaserstars.com/assets/img/676d2e4aa15433c5dbfa143542d7fd59.png"},
-  
-]
+        async function saveUserToFirestore(user) {
+            try {
+                const userRef = db.collection('users').doc(user.uid);
+                await userRef.set({
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                console.log("User saved to Firestore");
+            } catch (error) {
+                console.error("Error saving user:", error);
+            }
+        }
 
-let cart = [];
+        function logoutUser() {
+            auth.signOut().then(() => {
+                showNotification('Logged out successfully');
+                showPage('home');
+            });
+        }
 
-/* Render Products */
-function renderProducts(list = products) {
-  const grid = document.getElementById("productGrid");
-  grid.innerHTML = "";
-  list.forEach(p => {
-    grid.innerHTML += `
-      <div class="card">
-        <img src="${p.img}" alt="">
-        <h3>${p.name}</h3>
-        <p>Rs${p.price}</p>
-        <div class="btn" onclick="buyProduct('${p.name}')">Buy</div>
-      </div>
-    `;
-  });
-}
-renderProducts();
+        // ========== USER INTERFACE FUNCTIONS ==========
+        function updateUserDisplay() {
+            const userDetails = document.getElementById('userDetails');
+            const loginButton = document.getElementById('loginButton');
+            
+            if (currentUser) {
+                userDetails.style.display = 'flex';
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('userAvatar').innerHTML = `<span>${currentUser.name.charAt(0).toUpperCase()}</span>`;
+                
+                loginButton.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+                loginButton.onclick = logoutUser;
+            } else {
+                userDetails.style.display = 'none';
+                loginButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                loginButton.onclick = openAuth;
+            }
+        }
 
-function buyProduct(name) {
-  // Example: alert, can replace with your form or buy function
-  alert("You clicked Buy for " + name);
-}
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('active');
+        }
 
-/* Search Filter: always return all products if no match */
-function filterProducts() {
-  const q = document.getElementById("searchInput").value.toLowerCase();
-  const filtered = products.filter(p => p.name.toLowerCase().includes(q));
-  if (filtered.length === 0) renderProducts(products); // show all if nothing matches
-  else renderProducts(filtered);
-}
-</script>
+        function closeUserMenu() {
+            document.getElementById('userMenu').classList.remove('active');
+        }
 
+        // ========== PRODUCT FUNCTIONS ==========
+        function loadProducts() {
+            // Default products
+            products = [
+                {
+                    id: "1",
+                    name: "Watch",
+                    description: "Swiss automatic movement with sapphire crystal",
+                    price: 3232,
+                    image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    category: "watches"
+                },
+                {
+                    id: "2",
+                    name: "Bag",
+                    description: "Hand-stitched premium Italian leather",
+                    price: 28999,
+                    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    category: "shoes"
+                },
+                {
+                    id: "3",
+                    name: "Chair",
+                    description: "Handcrafted acetate frames with polarized lenses",
+                    price: 14222,
+                    image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    category: "accessories"
+                },
+                {
+                    id: "4",
+                    name: "Phone",
+                    description: "Latest smartphone with advanced features",
+                    price: 14232,
+                    image: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    category: "electronics"
+                }
+            ];
+            
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+            
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div style="position: relative; overflow: hidden;">
+                        <div class="product-badge">PREMIUM</div>
+                        <img src="${product.image}" alt="${product.name}" class="product-img">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-desc">${product.description}</p>
+                        <div class="product-price">₹${product.price.toLocaleString()}</div>
+                        <div class="product-actions">
+                            <button class="btn btn-secondary" onclick="addToCart('${product.id}')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-primary" onclick="buyNow('${product.id}')">
+                                <i class="fas fa-bolt"></i> Buy Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ========== CART FUNCTIONS ==========
+        function addToCart(productId) {
+            if (!currentUser) {
+                showNotification('Please login first', 'error');
+                openAuth();
+                return;
+            }
+            
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showNotification('Added to cart!');
+        }
+
+        function buyNow(productId) {
+            if (!currentUser) {
+                showNotification('Please login first', 'error');
+                openAuth();
+                return;
+            }
+            
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            cart = [{
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                quantity: 1
+            }];
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            openPaymentOptions();
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            document.querySelector('.cart-count').textContent = totalItems;
+        }
+
+        function calculateCartTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+        }
+
+        function openCart() {
+            if (!currentUser) {
+                showNotification('Please login first', 'error');
+                openAuth();
+                return;
+            }
+            
+            const container = document.getElementById('cartItems');
+            container.innerHTML = '';
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #888; padding: 40px;">Your cart is empty</p>';
+            } else {
+                let total = 0;
+                
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * (item.quantity || 1);
+                    total += itemTotal;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.style.cssText = `
+                        padding: 15px 0;
+                        border-bottom: 1px solid #333;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    `;
+                    cartItem.innerHTML = `
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; margin-bottom: 5px;">${item.name}</div>
+                            <div style="font-size: 14px; color: #888;">Qty: ${item.quantity || 1}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="color: var(--gold); font-weight: 500;">₹${itemTotal.toLocaleString()}</div>
+                            <button onclick="removeFromCart(${index})" style="
+                                background: none;
+                                border: none;
+                                color: var(--red);
+                                cursor: pointer;
+                                padding: 5px;
+                                font-size: 14px;
+                            ">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(cartItem);
+                });
+                
+                document.getElementById('cartTotal').textContent = `₹${total.toLocaleString()}`;
+            }
+            
+            document.getElementById('cartModal').style.display = 'block';
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            openCart();
+            showNotification('Item removed from cart');
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        // ========== PAYMENT FUNCTIONS (NEW) ==========
+        function openPaymentOptions() {
+            if (!currentUser) {
+                showNotification('Please login first', 'error');
+                openAuth();
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showNotification('Your cart is empty', 'error');
+                return;
+            }
+            
+            const total = calculateCartTotal();
+            document.getElementById('paymentTotal').textContent = total.toLocaleString();
+            document.getElementById('bankAmount').textContent = total.toLocaleString();
+            
+            document.getElementById('paymentOptionsModal').style.display = 'block';
+            closeCart();
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentOptionsModal').style.display = 'none';
+        }
+
+        function selectCOD() {
+            closePaymentModal();
+            openCheckout();
+        }
+
+        function openEasyPaisa() {
+            const total = calculateCartTotal();
+            // EasyPaisa Payment Link
+            const easypaisaLink = `https://easypaisa.com.pk/online-payment?amount=${total}&description=RootShoot+Payment&merchant=ROOTSHOOT`;
+            window.open(easypaisaLink, '_blank');
+            showNotification('Opening EasyPaisa payment page...');
+            savePaymentRecord('easypaisa', total);
+        }
+
+        function openJazzCash() {
+            const total = calculateCartTotal();
+            // JazzCash Payment Link
+            const jazzcashLink = `https://jazzcash.com.pk/online-payment?amount=${total}&description=RootShoot+Order&merchant=ROOTSHOOT`;
+            window.open(jazzcashLink, '_blank');
+            showNotification('Opening JazzCash payment page...');
+            savePaymentRecord('jazzcash', total);
+        }
+
+        function showBankOptions() {
+            document.getElementById('paymentOptionsModal').style.display = 'none';
+            document.getElementById('bankOptionsModal').style.display = 'block';
+        }
+
+        function closeBankModal() {
+            document.getElementById('bankOptionsModal').style.display = 'none';
+            document.getElementById('paymentOptionsModal').style.display = 'block';
+        }
+
+        function openBank(bankName) {
+            const bankLinks = {
+                'hbl': 'https://www.hbl.com/',
+                'meezan': 'https://www.meezanbank.com/',
+                'ubl': 'https://www.ubldigital.com/',
+                'alfalah': 'https://www.bankalfalah.com/',
+                'mcb': 'https://www.mcb.com.pk/',
+                'askari': 'https://www.askaribank.com.pk/',
+                'scb': 'https://www.sc.com/pk/',
+                'soneri': 'https://www.soneribank.com/'
+            };
+            
+            window.open(bankLinks[bankName], '_blank');
+            showNotification(`Open ${bankName} website and transfer ₹${calculateCartTotal().toLocaleString()} to account: 0333-1234567`);
+            savePaymentRecord('bank_' + bankName, calculateCartTotal());
+        }
+
+        function openCardPayment() {
+            const total = calculateCartTotal();
+            // Stripe Payment Link Example
+            const stripeLink = `https://buy.stripe.com/test_00g6pB3tJ9QT3Ly3cc?prefilled_amount=${total * 100}`;
+            window.open(stripeLink, '_blank');
+            showNotification('Opening secure card payment page...');
+            savePaymentRecord('card', total);
+        }
+
+        async function savePaymentRecord(method, amount) {
+            if (!currentUser) return;
+            
+            try {
+                const paymentId = 'PAY' + Date.now();
+                const paymentData = {
+                    id: paymentId,
+                    userId: currentUser.uid,
+                    userName: currentUser.name,
+                    userEmail: currentUser.email,
+                    method: method,
+                    amount: amount,
+                    status: 'Pending',
+                    items: cart.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.quantity || 1
+                    })),
+                    createdAt: new Date().toISOString(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await db.collection('payments').doc(paymentId).set(paymentData);
+                console.log("Payment record saved");
+                
+            } catch (error) {
+                console.error("Error saving payment:", error);
+            }
+        }
+
+        // ========== CHECKOUT FUNCTIONS ==========
+        function openCheckout() {
+            if (!currentUser) {
+                showNotification('Please login first', 'error');
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showNotification('Your cart is empty', 'error');
+                return;
+            }
+            
+            let summary = '<h4 style="color: var(--gold); margin-bottom: 15px;">Order Summary:</h4>';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * (item.quantity || 1);
+                total += itemTotal;
+                
+                summary += `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #333;">
+                        <div>
+                            <div>${item.name}</div>
+                            <div style="font-size: 12px; color: #888;">Qty: ${item.quantity || 1}</div>
+                        </div>
+                        <div style="color: var(--gold); font-weight: 500;">₹${itemTotal.toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            
+            summary += `
+                <hr style="margin: 15px 0; border-color: #444;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 18px;">
+                    <span>Total:</span>
+                    <span>₹${total.toLocaleString()}</span>
+                </div>
+            `;
+            
+            document.getElementById('orderSummary').innerHTML = summary;
+            
+            // Auto-fill user info
+            if (currentUser) {
+                document.getElementById('customerName').value = currentUser.name;
+                document.getElementById('customerEmail').value = currentUser.email;
+            }
+            
+            document.getElementById('checkoutModal').style.display = 'block';
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+            document.getElementById('checkoutForm').reset();
+        }
+
+        async function placeOrder() {
+            console.log("Placing order...");
+            
+            if (!currentUser) {
+                showNotification('Please login first', 'error');
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showNotification('Cart is empty', 'error');
+                return;
+            }
+            
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+            const address = document.getElementById('customerAddress').value.trim();
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            
+            if (!name || !phone || !email || !address) {
+                showNotification('Please fill all fields', 'error');
+                return;
+            }
+            
+            if (phone.length !== 10 || isNaN(phone)) {
+                showNotification('Please enter valid 10-digit phone', 'error');
+                return;
+            }
+            
+            try {
+                const orderId = 'ORD' + Date.now();
+                const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                
+                const orderData = {
+                    id: orderId,
+                    userId: currentUser.uid,
+                    userName: name,
+                    userEmail: email,
+                    userPhone: phone,
+                    address: address,
+                    paymentMethod: paymentMethod,
+                    items: cart.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.quantity || 1,
+                        image: item.image
+                    })),
+                    total: total,
+                    status: 'Pending',
+                    createdAt: new Date().toISOString(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                console.log("Saving order:", orderData);
+                
+                // ✅ SAVE ORDER TO FIRESTORE
+                await db.collection('orders').doc(orderId).set(orderData);
+                console.log("Order saved to Firestore!");
+                
+                // ✅ UPDATE USER INFO
+                await db.collection('users').doc(currentUser.uid).set({
+                    phone: phone,
+                    address: address,
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                
+                // ✅ CLOSE MODALS
+                closeCheckout();
+                closeCart();
+                closePaymentModal();
+                closeBankModal();
+                
+                // ✅ CLEAR CART
+                cart = [];
+                localStorage.removeItem('cart');
+                updateCartCount();
+                
+                // ✅ RESET FORM
+                document.getElementById('checkoutForm').reset();
+                
+                // ✅ SHOW SUCCESS MESSAGE
+                showNotification(`Order #${orderId} placed successfully!`);
+                
+                // ✅ LOAD ORDERS IMMEDIATELY
+                setTimeout(() => {
+                    loadUserOrders();
+                    showPage('orders');
+                }, 500);
+                
+            } catch (error) {
+                console.error("Error placing order:", error);
+                showNotification('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ========== MESSAGING FUNCTIONS ==========
+        async function sendMessage() {
+            console.log("Sending message...");
+            
+            if (!currentUser) {
+                showNotification('Please login first', 'error');
+                openAuth();
+                return;
+            }
+            
+            const name = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const phone = document.getElementById('contactPhone').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+            
+            if (!name || !email || !phone || !message) {
+                showNotification('Please fill all fields', 'error');
+                return;
+            }
+            
+            if (phone.length !== 10 || isNaN(phone)) {
+                showNotification('Please enter valid 10-digit phone', 'error');
+                return;
+            }
+            
+            try {
+                const messageId = 'MSG' + Date.now();
+                
+                const messageData = {
+                    id: messageId,
+                    userId: currentUser.uid,
+                    userName: name,
+                    userEmail: email,
+                    userPhone: phone,
+                    message: message,
+                    replied: false,
+                    reply: '',
+                    createdAt: new Date().toISOString(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                console.log("Saving message:", messageData);
+                
+                // ✅ SAVE MESSAGE TO FIRESTORE
+                await db.collection('messages').doc(messageId).set(messageData);
+                console.log("Message saved!");
+                
+                // ✅ CLEAR FORM
+                document.getElementById('contactForm').reset();
+                
+                showNotification('Message sent! Admin will reply soon.');
+                
+                // ✅ LOAD MESSAGES IMMEDIATELY
+                setTimeout(() => {
+                    loadUserMessages();
+                    showPage('messages');
+                }, 500);
+                
+            } catch (error) {
+                console.error("Error sending message:", error);
+                showNotification('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ========== LOAD USER ORDERS ==========
+        async function loadUserOrders(filter = 'all') {
+            if (!currentUser) {
+                document.getElementById('ordersContainer').innerHTML = `
+                    <div class="order-card">
+                        <p style="text-align: center; color: #888;">Please login to view orders</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const container = document.getElementById('ordersContainer');
+            container.innerHTML = '<p style="text-align: center; color: #888; padding: 40px;">Loading orders...</p>';
+            
+            try {
+                console.log("Loading orders for user:", currentUser.uid);
+                
+                const snapshot = await db.collection('orders')
+                    .where('userId', '==', currentUser.uid)
+                    .get();
+                
+                console.log("Found orders:", snapshot.size);
+                
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="order-card">
+                            <p style="text-align: center; color: #888;">No orders yet</p>
+                            <div style="text-align: center; margin-top: 15px;">
+                                <button class="btn btn-primary" onclick="showPage('products')">
+                                    <i class="fas fa-shopping-bag"></i> Start Shopping
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                // Convert to array
+                const orders = [];
+                snapshot.forEach(doc => {
+                    orders.push(doc.data());
+                });
+                
+                // Sort by date (newest first)
+                orders.sort((a, b) => {
+                    const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+                    const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+                    return dateB - dateA;
+                });
+                
+                // Apply filter
+                const filteredOrders = filter === 'all' 
+                    ? orders 
+                    : orders.filter(order => order.status === filter);
+                
+                if (filteredOrders.length === 0) {
+                    container.innerHTML = `
+                        <div class="order-card">
+                            <p style="text-align: center; color: #888;">No ${filter} orders found</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Display orders
+                filteredOrders.forEach(order => {
+                    const card = document.createElement('div');
+                    card.className = 'order-card';
+                    
+                    const date = order.createdAt 
+                        ? new Date(order.createdAt).toLocaleString() 
+                        : 'Recent';
+                    
+                    card.innerHTML = `
+                        <div class="order-header">
+                            <div>
+                                <div style="font-weight: bold; color: var(--gold); font-size: 18px;">Order #${order.id}</div>
+                                <div style="font-size: 14px; color: #888;">${date}</div>
+                            </div>
+                            <div class="order-status status-${order.status.toLowerCase()}">
+                                ${order.status}
+                            </div>
+                        </div>
+                        
+                        <div class="order-items">
+                            <strong style="display: block; margin-bottom: 10px; color: #ccc;">Items:</strong>
+                            ${order.items.map(item => `
+                                <div class="order-item">
+                                    <div>${item.name} × ${item.quantity}</div>
+                                    <div style="color: var(--gold); font-weight: 500;">₹${(item.price * item.quantity).toLocaleString()}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <div style="margin-bottom: 5px;"><strong>Payment:</strong> ${order.paymentMethod}</div>
+                            <div style="margin-bottom: 5px;"><strong>Delivery Address:</strong> ${order.address}</div>
+                            <div><strong>Contact:</strong> ${order.userPhone}</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #444;">
+                            <div style="font-size: 20px; font-weight: bold; color: var(--gold);">
+                                Total: ₹${order.total.toLocaleString()}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+                
+            } catch (error) {
+                console.error("Error loading orders:", error);
+                container.innerHTML = `
+                    <div class="order-card">
+                        <p style="text-align: center; color: var(--red);">Error loading orders</p>
+                        <p style="text-align: center; color: #888; font-size: 14px;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ========== LOAD USER MESSAGES ==========
+        async function loadUserMessages() {
+            if (!currentUser) {
+                document.getElementById('messagesContainer').innerHTML = `
+                    <div class="order-card">
+                        <p style="text-align: center; color: #888;">Please login to view messages</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = '<p style="text-align: center; color: #888; padding: 40px;">Loading messages...</p>';
+            
+            try {
+                console.log("Loading messages for user:", currentUser.uid);
+                
+                const snapshot = await db.collection('messages')
+                    .where('userId', '==', currentUser.uid)
+                    .get();
+                
+                console.log("Found messages:", snapshot.size);
+                
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="order-card">
+                            <p style="text-align: center; color: #888;">No messages yet</p>
+                            <div style="text-align: center; margin-top: 15px;">
+                                <button class="btn btn-primary" onclick="showPage('contact')">
+                                    <i class="fas fa-envelope"></i> Contact Admin
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                // Convert to array
+                const messages = [];
+                snapshot.forEach(doc => {
+                    messages.push(doc.data());
+                });
+                
+                // Sort by date (newest first)
+                messages.sort((a, b) => {
+                    const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+                    const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+                    return dateB - dateA;
+                });
+                
+                messages.forEach(msg => {
+                    const card = document.createElement('div');
+                    card.className = 'order-card';
+                    
+                    const date = msg.createdAt 
+                        ? new Date(msg.createdAt).toLocaleString() 
+                        : 'Recent';
+                    
+                    card.innerHTML = `
+                        <div class="order-header">
+                            <div>
+                                <div style="font-weight: bold; color: var(--gold);">Message #${msg.id}</div>
+                                <div style="font-size: 14px; color: #888;">${date}</div>
+                            </div>
+                            <div class="order-status ${msg.replied ? 'status-delivered' : 'status-pending'}">
+                                ${msg.replied ? 'Replied' : 'Pending'}
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 15px 0;">
+                            <strong>Your Message:</strong>
+                            <div style="margin-top: 5px; padding: 10px; background: rgba(255,215,0,0.1); border-radius: 4px;">
+                                ${msg.message}
+                            </div>
+                        </div>
+                        
+                        ${msg.replied ? `
+                            <div class="admin-reply">
+                                <strong><i class="fas fa-reply"></i> Admin's Reply:</strong>
+                                <div style="margin-top: 5px; color: #ccc;">${msg.reply || 'Thank you for your message!'}</div>
+                            </div>
+                        ` : `
+                            <div style="margin-top: 15px; padding: 10px; background: rgba(255,215,0,0.05); border-radius: 4px; text-align: center;">
+                                <i class="fas fa-clock" style="color: #888;"></i>
+                                <span style="color: #888; margin-left: 5px;">Waiting for admin reply</span>
+                            </div>
+                        `}
+                    `;
+                    container.appendChild(card);
+                });
+                
+            } catch (error) {
+                console.error("Error loading messages:", error);
+                container.innerHTML = `
+                    <div class="order-card">
+                        <p style="text-align: center; color: var(--red);">Error loading messages</p>
+                        <p style="text-align: center; color: #888; font-size: 14px;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ========== PAGE NAVIGATION ==========
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(page + '-page').classList.add('active');
+            
+            switch(page) {
+                case 'products':
+                    loadProducts();
+                    break;
+                case 'orders':
+                    loadUserOrders();
+                    break;
+                case 'messages':
+                    loadUserMessages();
+                    break;
+                case 'profile':
+                    loadProfileInfo();
+                    break;
+            }
+            
+            closeUserMenu();
+        }
+
+        function filterOrders(status) {
+            currentFilter = status;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadUserOrders(status);
+        }
+
+        async function loadProfileInfo() {
+            if (!currentUser) return;
+            
+            const container = document.getElementById('profileInfo');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div class="user-avatar" style="width: 80px; height: 80px; font-size: 24px; margin: 0 auto 20px;">
+                        <span>${currentUser.name.charAt(0).toUpperCase()}</span>
+                    </div>
+                    <h3 style="color: var(--gold); margin-bottom: 10px;">${currentUser.name}</h3>
+                    <p style="color: #888; margin-bottom: 20px;">${currentUser.email}</p>
+                    
+                    <div style="background: rgba(255,215,0,0.1); padding: 15px; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; color: var(--gold); font-weight: bold;" id="orderCount">0</div>
+                                <div style="font-size: 14px; color: #888;">Total Orders</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; color: var(--gold); font-weight: bold;" id="messageCount">0</div>
+                                <div style="font-size: 14px; color: #888;">Messages</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Load stats
+            try {
+                const ordersSnapshot = await db.collection('orders')
+                    .where('userId', '==', currentUser.uid)
+                    .get();
+                
+                const messagesSnapshot = await db.collection('messages')
+                    .where('userId', '==', currentUser.uid)
+                    .get();
+                
+                document.getElementById('orderCount').textContent = ordersSnapshot.size;
+                document.getElementById('messageCount').textContent = messagesSnapshot.size;
+                
+            } catch (error) {
+                console.error("Error loading profile stats:", error);
+            }
+        }
+
+        // ========== MODAL FUNCTIONS ==========
+        function openAuth() {
+            document.getElementById('authModal').style.display = 'block';
+        }
+
+        function closeAuth() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type === 'error' ? 'error' : ''}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.id === 'cartModal') closeCart();
+            if (event.target.id === 'authModal') closeAuth();
+            if (event.target.id === 'checkoutModal') closeCheckout();
+            if (event.target.id === 'paymentOptionsModal') closePaymentModal();
+            if (event.target.id === 'bankOptionsModal') closeBankModal();
+        };
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeCart();
+                closeAuth();
+                closeCheckout();
+                closePaymentModal();
+                closeBankModal();
+            }
+        });
+    </script>
 </body>
 </html>
